@@ -1,0 +1,43 @@
+Client
+1. The algorithm will have 4 phases: slow_start, congestion_avoidence, and fast_retransmission. lastSeqNum is calculated according to input file size
+2. Variable Initialization
+    prev: previous ack_num received
+    dup_cnt: duplicate ack num counts
+    ssh: the slow start threshold
+    cwnd: congestion control window
+    windowLeft & windowRight: record the seq_num within the window
+    windowEnd: calculated last seq_num in current cwnd, used to update cwnd in congestion control state
+3. Start by sendinng the first packet with seq_num = 1. The starting phase is slow_start.
+4. Starting listening for ACKs
+    Listen socket not timeout:
+        (1). Once an ACK was received, increase dup_cnt if ack_num duplicates with prev. Otherwise, new ACK received, reset dup_cnt. Change to congestion_control state if previously is fast_retransmit. 
+        (2). If dup_cnt == 3
+            a. Change to fast_retransmit
+            b. Retransmit packet with seq_num == ack_pkt.acknum
+            c. set ssh = cwnd / 2, cwnd = ssh + 3, windowEnd = ack_num.acknum + cwnd - 1
+        (3). If dup_cnt > 3
+            a. cwnd += 1, windowEnd += 1 (fast_recovery, but status not indicated)
+        (4). If at slow_start and cwnd > ssh: change to congestion_avoidance
+        (5). Pop seq_num from the current window up to the new ack_num received with windowLeft + 1 to achieve accumulative acknowledge
+        (6). If still at slow start: cwnd += 1, windowEnd = ack_num.acknum + cwnd - 1
+        (7). If at congestion_avoidance and ack_num > windowEnd: cwnd += 1, windowEnd += cwnd to achieve cwnd = cwnd + MSS*(MSS/cwnd) during lecture
+        (8). Transmit new packets with seq_num = windowRight + 1 until windowRight - windowLeft + 1 == cwnd. Every newly transmitted packet will be push into the window
+    Listen socket timeout:
+        (1). Change back to slow_start
+        (2). ssh = cwnd / 2, cwnd = 1, prev_ack = 0, windowEnd = windowLeft
+        (3). retransmit the packet with seq_num = windowEnd
+
+Note
+1. For packet transmission, the seq_num is used to locate the start position of input stream: (seq_num - 1) * PAYLOAD_SIZE
+2. last is also checked with seq_num == lastSeqNum
+
+
+Server
+1. Init a priority queue to handle out-of-order packets, and expected_seq_num = 1
+2. Whenever receive a packet matching the expected_seq_num
+    (1). write the payload into the output file
+    (2). Pop consecutive in-order packet from the priority queue and update expected_seq_num
+3. If the packet seq_num > expected_seq_num, add the received packet into the priority queue
+4. If the packet with last == 1 received, write the last packet into the output file and terminate the server
+
+

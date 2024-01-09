@@ -1,0 +1,13 @@
+.vscode
+.DS_Store
+
+output.txt
+temp.txt
+input2.txt
+
+# binary file
+client
+server
+.DS_Store
+
+*.dSYM/
