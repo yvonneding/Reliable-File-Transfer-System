@@ -1,10 +1,8 @@
-# CS 118 Course Project 2 - Reliable Data Transfer and Congestion Control
-
-**WARNING**: This README is provided as supplementary documentation to assist with the setup and execution of the course project. It does not replace the official project specification. Please refer to the official project specification for detailed requirements and instructions. In the case of any discrepancies or ambiguities, the official project specification takes precedence.
+# Reliable File Transfer and Congestion Control
 
 ## Overview
 
-This project aims to familiarize students with the concepts of reliable data transfer, congestion control, and building client-server applications over UDP. Students will implement a client and server in C that can upload files from the client to the server over UDP while handling packet loss, implementing reliability, and congestion control.
+This project aims to familiarize with the concepts of reliable data transfer, congestion control, and building client-server applications over UDP. The repository includes implementation of a client and server in C++ that can upload files from the client to the server over UDP while handling packet loss, implementing reliability, and congestion control.
 
 ## Getting Started
 
@@ -93,16 +91,5 @@ Implement the (potential) logic for:
 - Reassembling the packets into the original file.
 - Writing the reassembled file to the filesystem as `output.txt`.
 
-## Modifying the Code
-
-Students are allowed and encouraged to modify the provided skeleton code and `utils.h` to fit the needs of their implementation as long as the core objectives are met.
-
-## Submission
-
-Please compress your modified `utils.h` `server.c`, `client.c`, `report.txt`, and `Makefile` into a zip file using the following command:
-
-```sh
-make zip
-```
-
-Submit it according to the course submission guidelines.
+## Project Flow Chart
+[PseudoCode File](https://github.com/yvonneding/Reliable-File-Transfer-System/blob/main/PseudoCode.md) includes the workflow of both server and client, breaking down into the individual task and list the algorithm in pseudocode. 
